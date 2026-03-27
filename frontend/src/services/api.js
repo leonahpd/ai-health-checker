@@ -1,5 +1,9 @@
 import axios from "axios";
 
+const API = axios.create({
+  baseURL: "http://localhost:8000"
+});
+
 export const predictDisease = (symptoms) => {
-  return axios.post("/predict", { symptoms });
-};
+  return API.post("/predict", symptoms);
+};;
