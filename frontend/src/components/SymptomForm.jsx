@@ -1,26 +1,23 @@
 import { useState } from "react";
-import axios from "axios";
+import { predictDisease } from "../services/api";
 
-function SymptomForm() {
-  const [symptoms, setSymptoms] = useState("");
-  const [result, setResult] = useState(null);
+function SymptomForm({ setResult }) {
+  const [input, setInput] = useState("");
 
   const handleSubmit = async () => {
-    const res = await axios.post("http://localhost:8000/predict", {
-      symptoms: symptoms.split(",")
-    });
+    const symptoms = input.split(",").map(s => s.trim());
+    const res = await predictDisease(symptoms);
     setResult(res.data);
   };
 
   return (
     <div>
+      <h2>Enter Symptoms</h2>
       <input
-        placeholder="Enter symptoms"
-        onChange={(e) => setSymptoms(e.target.value)}
+        placeholder="e.g fever, cough"
+        onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={handleSubmit}>Check</button>
-
-      {result && <p>Disease: {result.disease}</p>}
+      <button onClick={handleSubmit}>Predict</button>
     </div>
   );
 }
